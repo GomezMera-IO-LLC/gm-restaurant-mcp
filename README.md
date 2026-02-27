@@ -32,7 +32,63 @@ uv pip install -e .
 pip install -e .
 ```
 
-### 3. Configure in Kiro
+### 3. Configure API Key
+
+**Quick Setup (Recommended):**
+
+**On macOS/Linux:**
+```bash
+chmod +x setup_api_key.sh
+./setup_api_key.sh
+```
+
+**On Windows (PowerShell):**
+```powershell
+.\setup_api_key.ps1
+```
+
+**On Windows (Command Prompt):**
+```cmd
+setup_api_key.bat
+```
+
+**Manual Setup:**
+
+Create a file in your home directory with your API key:
+
+**On macOS/Linux:**
+```bash
+# Create the API key file
+echo "YOUR_API_KEY_HERE" > ~/.env.googleapi
+
+# Or edit it manually
+nano ~/.env.googleapi
+```
+
+**On Windows (PowerShell):**
+```powershell
+# Create the API key file
+"YOUR_API_KEY_HERE" | Out-File -FilePath "$env:USERPROFILE\.env.googleapi" -Encoding ASCII
+
+# Or edit it manually
+notepad "$env:USERPROFILE\.env.googleapi"
+```
+
+**On Windows (Command Prompt):**
+```cmd
+echo YOUR_API_KEY_HERE > %USERPROFILE%\.env.googleapi
+notepad %USERPROFILE%\.env.googleapi
+```
+
+Replace `YOUR_API_KEY_HERE` with your actual Google Maps API key.
+
+**File Location:**
+- macOS/Linux: `~/.env.googleapi` (e.g., `/Users/yourname/.env.googleapi`)
+- Windows: `%USERPROFILE%\.env.googleapi` (e.g., `C:\Users\yourname\.env.googleapi`)
+
+**Security Note**: The API key is stored in your home directory (not in the repository or mcp.json) for better security.
+
+### 4. Configure in Kiro
 
 Add to your `.kiro/settings/mcp.json`:
 
@@ -40,31 +96,18 @@ Add to your `.kiro/settings/mcp.json`:
 {
   "mcpServers": {
     "restaurant-finder": {
-      "command": "python",
-      "args": ["-m", "restaurant_finder_mcp.server"],
-      "env": {
-        "GOOGLE_MAPS_API_KEY": "YOUR_API_KEY_HERE"
-      }
+      "command": "python3",
+      "args": ["/absolute/path/to/gm-restaurant-mcp/restaurant_finder_mcp/server.py"],
+      "disabled": false,
+      "autoApprove": []
     }
   }
 }
 ```
 
-Or if using uvx:
+Replace `/absolute/path/to/gm-restaurant-mcp` with your actual path.
 
-```json
-{
-  "mcpServers": {
-    "restaurant-finder": {
-      "command": "uvx",
-      "args": ["restaurant-finder-mcp"],
-      "env": {
-        "GOOGLE_MAPS_API_KEY": "YOUR_API_KEY_HERE"
-      }
-    }
-  }
-}
-```
+**Note**: No API key needed in mcp.json - it's read from `~/.env.googleapi` automatically.
 
 ## Usage
 

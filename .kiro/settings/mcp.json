@@ -5,12 +5,8 @@
       "args": [
         "/Users/carlosgomez/repos/gomezmera/gm-restaurants-mcp/restaurant_finder_mcp/server.py"
       ],
-      "env": {
-        "GOOGLE_MAPS_API_KEY": "AIzaSyAIxTlyRypSVlNEg3TELBwNtlt8sIByjHo"
-      },
       "disabled": false,
-      "autoApprove": [],
-      "disabledTools": []
+      "autoApprove": []
     }
   }
 }
