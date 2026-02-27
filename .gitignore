@@ -22,3 +22,9 @@ wheels/
 .venv
 env/
 venv/
+
+# Local MCP configuration (may contain API keys or local paths)
+.kiro/settings/mcp.json
+
+# GitGuardian cache (contains references to detected secrets)
+.cache_ggshield

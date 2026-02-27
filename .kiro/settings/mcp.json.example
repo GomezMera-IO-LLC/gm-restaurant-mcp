@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "restaurant-finder": {
+      "command": "python3",
+      "args": [
+        "/path/to/gm-restaurant-mcp/restaurant_finder_mcp/server.py"
+      ],
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
