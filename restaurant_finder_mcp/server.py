@@ -4,12 +4,33 @@ import sys
 import json
 import googlemaps
 
+# Import optimized client
+try:
+    from .optimized_client import OptimizedGoogleMapsClient
+    USE_OPTIMIZED = True
+except ImportError:
+    USE_OPTIMIZED = False
+
+# Global client instance
+_gmaps_client = None
+
 def get_gmaps_client():
     """Initialize Google Maps client with API key from environment"""
+    global _gmaps_client
+    
+    if _gmaps_client is not None:
+        return _gmaps_client
+    
     api_key = os.getenv("GOOGLE_MAPS_API_KEY")
     if not api_key:
         raise ValueError("GOOGLE_MAPS_API_KEY environment variable not set")
-    return googlemaps.Client(key=api_key)
+    
+    if USE_OPTIMIZED:
+        _gmaps_client = OptimizedGoogleMapsClient(api_key, cache_ttl=86400)  # 24 hour cache
+    else:
+        _gmaps_client = googlemaps.Client(key=api_key)
+    
+    return _gmaps_client
 
 def find_restaurants_by_location(gmaps, location, radius=1500, max_results=10, min_rating=0, cuisine_type=None, max_price_level=None):
     """Find restaurants near a specific location"""
@@ -632,6 +653,19 @@ def get_review_link(gmaps, restaurant_name, location):
         "instructions": "Click the review_url to open Google Maps and leave your review. You'll need to be signed in to your Google account."
     }
 
+def get_usage_stats():
+    """Get API usage statistics and cache performance"""
+    gmaps = get_gmaps_client()
+    
+    if USE_OPTIMIZED and hasattr(gmaps, 'get_usage_stats'):
+        stats = gmaps.get_usage_stats()
+        return stats
+    else:
+        return {
+            "message": "Usage tracking not available. Install optimized client for tracking.",
+            "recommendation": "Restart the MCP server to enable caching and usage tracking."
+        }
+
 def format_restaurant_results(gmaps, places):
     """Format restaurant data with reviews, type, price, and links"""
     formatted = []
@@ -994,6 +1028,15 @@ def handle_request(request):
                                 },
                                 "required": ["restaurant_name", "location"]
                             }
+                        },
+                        {
+                            "name": "get_usage_stats",
+                            "description": "Get API usage statistics, cache performance, and free tier status",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {},
+                                "required": []
+                            }
                         }
                     ]
                 }
@@ -1089,6 +1132,8 @@ def handle_request(request):
                     arguments.get("restaurant_name"),
                     arguments.get("location")
                 )
+            elif tool_name == "get_usage_stats":
+                result = get_usage_stats()
             else:
                 return {
                     "jsonrpc": "2.0",
