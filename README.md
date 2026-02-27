@@ -80,6 +80,40 @@ Find restaurants near Times Square, New York
 Find restaurants along the route from Boston to New York City
 ```
 
+## 🚀 Optimization & Free Tier
+
+This MCP includes built-in optimization to help you stay within Google's $200/month free tier:
+
+### Automatic Features
+- **24-hour caching**: Repeated searches are free
+- **Usage tracking**: Monitor API calls and costs
+- **Smart batching**: Efficient request handling
+
+### Check Your Usage
+```
+Get usage stats
+```
+
+Returns:
+- Total API calls this month
+- Estimated cost
+- Remaining free credit
+- Cache hit rate
+- Cost savings
+
+### Quick Setup
+```bash
+chmod +x setup_optimization.sh
+./setup_optimization.sh
+```
+
+### Stay Within Free Tier
+- ✅ Typical personal use: ~$15/month (92.5% under limit)
+- ✅ Caching reduces costs by ~50%
+- ✅ $200 credit = ~28,500 restaurant searches/month
+
+**Read [OPTIMIZATION_GUIDE.md](OPTIMIZATION_GUIDE.md) for detailed tips and best practices.**
+
 ## Tools
 
 ### `find_restaurants_by_location`
