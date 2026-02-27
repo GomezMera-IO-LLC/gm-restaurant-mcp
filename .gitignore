@@ -28,3 +28,6 @@ venv/
 
 # GitGuardian cache (contains references to detected secrets)
 .cache_ggshield
+
+# Kiro MCP Manager - Sensitive configuration files
+.kiro/settings/
