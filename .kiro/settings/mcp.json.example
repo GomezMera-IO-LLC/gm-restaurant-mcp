@@ -3,7 +3,7 @@
     "restaurant-finder": {
       "command": "python3",
       "args": [
-        "/Users/carlosgomez/repos/gomezmera/gm-restaurants-mcp/restaurant_finder_mcp/server.py"
+        "/path/to/gm-restaurant-mcp/restaurant_finder_mcp/server.py"
       ],
       "disabled": false,
       "autoApprove": []
