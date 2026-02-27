@@ -1,0 +1,1 @@
+"""Restaurant Finder MCP Server"""
