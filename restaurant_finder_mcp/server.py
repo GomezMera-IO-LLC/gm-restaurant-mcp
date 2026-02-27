@@ -3,6 +3,7 @@ import os
 import sys
 import json
 import googlemaps
+from pathlib import Path
 
 # Import optimized client
 try:
@@ -14,16 +15,43 @@ except ImportError:
 # Global client instance
 _gmaps_client = None
 
+def get_api_key():
+    """Get API key from ~/.env.googleapi file or environment variable (cross-platform)"""
+    # First try environment variable
+    api_key = os.getenv("GOOGLE_MAPS_API_KEY")
+    if api_key:
+        return api_key
+    
+    # Try reading from .env.googleapi file in user's home directory
+    # Path.home() works on Windows, macOS, and Linux
+    env_file = Path.home() / ".env.googleapi"
+    
+    if env_file.exists():
+        try:
+            with open(env_file, 'r') as f:
+                api_key = f.read().strip()
+                if api_key:
+                    return api_key
+        except Exception as e:
+            print(f"Error reading {env_file}: {e}", file=sys.stderr)
+    
+    # Provide helpful error message with correct path for user's OS
+    raise ValueError(
+        f"Google Maps API key not found. Please either:\n"
+        f"1. Create {env_file} with your API key, or\n"
+        f"2. Set GOOGLE_MAPS_API_KEY environment variable\n\n"
+        f"On Windows: {Path.home() / '.env.googleapi'}\n"
+        f"On macOS/Linux: ~/.env.googleapi"
+    )
+
 def get_gmaps_client():
-    """Initialize Google Maps client with API key from environment"""
+    """Initialize Google Maps client with API key from file or environment"""
     global _gmaps_client
     
     if _gmaps_client is not None:
         return _gmaps_client
     
-    api_key = os.getenv("GOOGLE_MAPS_API_KEY")
-    if not api_key:
-        raise ValueError("GOOGLE_MAPS_API_KEY environment variable not set")
+    api_key = get_api_key()
     
     if USE_OPTIMIZED:
         _gmaps_client = OptimizedGoogleMapsClient(api_key, cache_ttl=86400)  # 24 hour cache
