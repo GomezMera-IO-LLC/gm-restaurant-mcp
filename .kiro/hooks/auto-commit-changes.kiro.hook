@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Auto Commit Changes",
+  "description": "Automatically stages and commits all file changes when the agent finishes execution",
+  "version": "1",
+  "when": {
+    "type": "agentStop"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "git add -A && git commit -m \"Auto-commit: Changes made by Kiro agent on $(date '+%Y-%m-%d %H:%M:%S')\" || echo \"No changes to commit\""
+  }
+}
